@@ -1,0 +1,210 @@
+@midio_version("0.1.0")
+import("std", Std)
+import("http", Http)
+
+module Chat {
+    func ``Create chat completion`` {
+        in(x: -864.3333129882813, y: -101, name: "execute") trigger() execute_bbac29
+        in(x: -1548.000076293945, y: 159.33340454101563, name: "token") property(Any) gen_0_1
+        in(x: -1570.000076293945, y: 229.3334045410156, name: "messages") property messages_0
+        in(x: -1553, y: 303.0000610351562, name: "model") property(String) model_1d5346
+        out(x: 463.60023380852294, y: -147.33334350585938, name: "onSuccess") trigger() onSuccess_2
+        out(x: 498.93348576164794, y: -44.66668701171875, name: "value") property(Any) value_1
+        out(x: 470.93348576164794, y: 83.33331298828125, name: "onFailure") trigger() onFailure_0
+        out(x: 484.26685978508544, y: 190.66665649414065, name: "error") property(Any) value_3
+        instance(x: 0.0, y: 0.0, stableId: "wnltu8f41t909w121zc7eiib") parse_0c785e root.Std.Json.Parse { }
+        data_instance(x: -878.2, y: 234.7, stableId: "b7201f65fsjywa6ul2jlakub") data_fbe911  = { messages: messages, model: model }
+        instance(x: 53.6, y: 243.9, stableId: "xg5cebj0bihhjgov4v4xpjcb") orelse_8c1efc root.Std.Std.OrElse { }
+        instance(x: -1262.1, y: 88.3, stableId: "i6dch6k58ixftowidckep88a") template_d88e20 root.Std.Strings.Template {
+            template: "Bearer {{token}}"
+        }
+        data_instance(x: -966.9, y: 73.2, stableId: "lfnv9vzjgixs1ac82bj2mnbj") data_1eba4e  = { ``content-type``: "application/json", authorization: auth }
+        instance(x: -390.0, y: 28.4, stableId: "d6q7nc1lx0myk9di9r7hkqwb") fetchurl_96da5f root.Http.Http.FetchUrl { }
+        fetchurl_96da5f.continue -> parse_0c785e.execute
+        fetchurl_96da5f.response -> parse_0c785e.string
+        data_1eba4e -> fetchurl_96da5f.headers
+        data_fbe911 -> fetchurl_96da5f.body
+        parse_0c785e.error -> orelse_8c1efc.first
+        fetchurl_96da5f.error -> orelse_8c1efc.second
+        template_d88e20.output -> data_1eba4e.auth
+        "https://api.openai.com/v1/chat/completions" -> fetchurl_96da5f.url
+        "text" -> fetchurl_96da5f.responseType
+        "POST" -> fetchurl_96da5f.method
+        messages_0 -> data_fbe911.messages
+        gen_0_1 -> template_d88e20.gen_0
+        parse_0c785e.onFailure -> onFailure_0
+        parse_0c785e.value -> value_1
+        parse_0c785e.onSuccess -> onSuccess_2
+        orelse_8c1efc.value -> value_3
+        execute_bbac29 -> fetchurl_96da5f.execute
+        fetchurl_96da5f.onError -> onFailure_0
+        model_1d5346 -> data_fbe911.model
+
+    }
+
+    module Tests {
+        instance(x: 1444.7, y: 402.9, stableId: "tk0ngcr91x0h57uea5vaghha") log_8a6948 root.Std.Std.Log { }
+        instance(x: 1444.7, y: 558.8, stableId: "js27mknbh4c4tyv5oyv8ir0a") log_e5a53e root.Std.Std.Log { }
+        data_instance(x: 564.5, y: 589.6, stableId: "s3mmrbd0ducwjqa6si5oewzx") data_88fda2  = [{ content: "You are a helpful assistant.", role: "system" }, { content: "Hello!", role: "user" }]
+        instance(x: 1077.3, y: 450.9, stableId: "fka996r0283g4xbrho5tyr3c") Completions_8bfa6d root.Chat.``Create chat completion`` { }
+        instance(x: 545.4, y: 437.9, stableId: "g7xckiritt6s56i55z5j544w") APIKey_d087a5 root.Utils.``API Key`` { }
+        data_88fda2 -> Completions_8bfa6d.messages_0
+        APIKey_d087a5.data_0 -> Completions_8bfa6d.gen_0_1
+        Completions_8bfa6d.onSuccess_2 -> log_8a6948.execute
+        Completions_8bfa6d.value_1 -> log_8a6948.input
+        Completions_8bfa6d.onFailure_0 -> log_e5a53e.execute
+        Completions_8bfa6d.value_3 -> log_e5a53e.input
+
+
+    }
+
+
+
+}
+
+module Embeddings {
+    func ``Create embedding`` {
+        in(x: -867.2093906616528, y: -73.38999137187227, name: "execute") trigger() execute_bbac29
+        in(x: -1572.7837040451088, y: 77.0786047236893, name: "token") property(Any) gen_0_1
+        in(x: -1569.7837040451088, y: 188.09323644103225, name: "input") property(String) input_f32118
+        in(x: -1575.7837040451088, y: 276.96295171281804, name: "model") property(String) model_3e653e
+        in(x: -1609, y: 362.3333740234375, name: "dimensions") property(Number) dimensions_f935eb
+        out(x: 463.60023380852294, y: -147.33334350585938, name: "onSuccess") trigger() onSuccess_2
+        out(x: 498.93348576164794, y: -44.66668701171875, name: "value") property(Any) value_1
+        out(x: 470.93348576164794, y: 83.33331298828125, name: "onFailure") trigger() onFailure_0
+        out(x: 497.981123701101, y: 248.9523468017578, name: "error") property(Any) value_3
+        instance(x: 0.0, y: 0.0, stableId: "slyorfjgnuwv6ykmavotjr4i") parse_0c785e root.Std.Json.Parse { }
+        instance(x: 53.6, y: 243.9, stableId: "earbaymgj0bxx61e2ixx5l7p") orelse_8c1efc root.Std.Std.OrElse { }
+        instance(x: -1262.1, y: 88.3, stableId: "drvmifjlv3lutwfn93diugrw") template_d88e20 root.Std.Strings.Template {
+            template: "Bearer {{token}}"
+        }
+        data_instance(x: -912.1, y: 66.5, stableId: "sjcauxd4r6pe0t2e3r2qr1pz") data_1eba4e  = { ``content-type``: "application/json", authorization: auth }
+        instance(x: -390.0, y: 28.4, stableId: "jgsah75ouwhb92sx5hz9m6vc") fetchurl_96da5f root.Http.Http.FetchUrl { }
+        data_instance(x: -894.4, y: 284.2, stableId: "np0e1074ccag30am9yoxusl0") data_ccdc2b  = { encoding_format: "float", input: input, model: model, dimensions: dim }
+        fetchurl_96da5f.continue -> parse_0c785e.execute
+        fetchurl_96da5f.response -> parse_0c785e.string
+        data_1eba4e -> fetchurl_96da5f.headers
+        parse_0c785e.error -> orelse_8c1efc.first
+        fetchurl_96da5f.error -> orelse_8c1efc.second
+        template_d88e20.output -> data_1eba4e.auth
+        "https://api.openai.com/v1/embeddings" -> fetchurl_96da5f.url
+        "text" -> fetchurl_96da5f.responseType
+        "POST" -> fetchurl_96da5f.method
+        gen_0_1 -> template_d88e20.gen_0
+        parse_0c785e.onFailure -> onFailure_0
+        parse_0c785e.value -> value_1
+        parse_0c785e.onSuccess -> onSuccess_2
+        orelse_8c1efc.value -> value_3
+        execute_bbac29 -> fetchurl_96da5f.execute
+        fetchurl_96da5f.onError -> onFailure_0
+        input_f32118 -> data_ccdc2b.input
+        model_3e653e -> data_ccdc2b.model
+        data_ccdc2b -> fetchurl_96da5f.body
+        dimensions_f935eb -> data_ccdc2b.dim
+
+    }
+
+    module Tests {
+        instance(x: 1080.7, y: 475.6, stableId: "e10k4fgjbke0bo0mxml8r4yk") ``create embedding_6b53d8`` root.Embeddings.``Create embedding`` { }
+        instance(x: 1517.2, y: 475.6, stableId: "ib2kaqp2vk673vnsr17r7ozq") log_ee8b99 root.Std.Std.Log { }
+        instance(x: 676.0, y: 494.3, stableId: "ln5w0dh5qpxljpoahc75cmxo") ``api key_054031`` root.Utils.``API Key`` { }
+        "Hello world" -> ``create embedding_6b53d8``.input_f32118
+        "text-embedding-ada-002" -> ``create embedding_6b53d8``.model_3e653e
+        ``create embedding_6b53d8``.value_1 -> log_ee8b99.input
+        ``create embedding_6b53d8``.onSuccess_2 -> log_ee8b99.execute
+        ``api key_054031``.data_0 -> ``create embedding_6b53d8``.gen_0_1
+
+
+    }
+
+
+
+}
+
+module Images {
+    func ``Create image`` {
+        in(x: 818.4460496568324, y: 633.8231224057768, name: "execute") trigger() execute_bbac29
+        in(x: 112.87173627337644, y: 784.2917185013383, name: "token") property(Any) gen_0_1
+        in(x: 102.3908449560065, y: 894.5877383964278, name: "model") property(String) mode_b8a632
+        in(x: 97.58905491803692, y: 986.1177133869191, name: "prompt") property(String) input_f32118
+        in(x: 75.66667175292969, y: 1105.6666870117188, name: "count") property(Number) count_f52bb9
+        in(x: 57.333343505859375, y: 1211, name: "width") property(Number) width_1cd064
+        in(x: 62, y: 1297.6666870117188, name: "height") property(Number) height_cc6430
+        out(x: 2149.255674127008, y: 559.8797702717897, name: "onSuccess") trigger() onSuccess_2
+        out(x: 2184.588926080133, y: 662.5464267659303, name: "value") property(Any) value_1
+        out(x: 2156.588926080133, y: 790.5464267659303, name: "onFailure") trigger() onFailure_0
+        out(x: 2169.9223001035707, y: 897.8797702717897, name: "error") property(Any) value_3
+        instance(x: 1685.7, y: 707.2, stableId: "vtarsm30q0bdllniozxy90a6") parse_0c785e root.Std.Json.Parse { }
+        instance(x: 1739.3, y: 951.1, stableId: "z4lzajvmfp3fpnu0rtabiyk6") orelse_8c1efc root.Std.Std.OrElse { }
+        instance(x: 423.6, y: 795.5, stableId: "yqc1gxisk5z3lmdwpfwpu63k") template_d88e20 root.Std.Strings.Template {
+            template: "Bearer {{token}}"
+        }
+        data_instance(x: 773.6, y: 773.7, stableId: "bylaynddj0issvhp81x4rv4s") data_1eba4e  = { ``content-type``: "application/json", authorization: auth }
+        instance(x: 1295.7, y: 735.6, stableId: "kr385tr9mku5lceq9pjo2c7n") fetchurl_96da5f root.Http.Http.FetchUrl { }
+        data_instance(x: 875.6, y: 1009.4, stableId: "jw3uo9f2nyvaiz39027029tp") data_6b6643  = { model: model, n: count, prompt: prompt, size: size }
+        instance(x: 440.0, y: 1229.0, stableId: "w1336b4n6qsdliybv7yfgu1t") template_7b3bf4 root.Std.Strings.Template {
+            template: "{{width}}x{{height}}"
+        }
+        fetchurl_96da5f.continue -> parse_0c785e.execute
+        fetchurl_96da5f.response -> parse_0c785e.string
+        data_1eba4e -> fetchurl_96da5f.headers
+        parse_0c785e.error -> orelse_8c1efc.first
+        fetchurl_96da5f.error -> orelse_8c1efc.second
+        template_d88e20.output -> data_1eba4e.auth
+        "https://api.openai.com/v1/images/generations" -> fetchurl_96da5f.url
+        "text" -> fetchurl_96da5f.responseType
+        "POST" -> fetchurl_96da5f.method
+        gen_0_1 -> template_d88e20.gen_0
+        parse_0c785e.onFailure -> onFailure_0
+        parse_0c785e.value -> value_1
+        parse_0c785e.onSuccess -> onSuccess_2
+        orelse_8c1efc.value -> value_3
+        execute_bbac29 -> fetchurl_96da5f.execute
+        fetchurl_96da5f.onError -> onFailure_0
+        input_f32118 -> data_6b6643.prompt
+        mode_b8a632 -> data_6b6643.model
+        width_1cd064 -> template_7b3bf4.gen_0
+        height_cc6430 -> template_7b3bf4.gen_1
+        template_7b3bf4.output -> data_6b6643.size
+        count_f52bb9 -> data_6b6643.count
+        data_6b6643 -> fetchurl_96da5f.body
+
+    }
+
+    module Tests {
+        instance(x: 940.2, y: 494.2, stableId: "qzh0vqbn2mk68t57l78s2qyl") ``create image_e17089`` root.Images.``Create image`` { }
+        instance(x: 1588.0, y: 439.7, stableId: "qk8sz59d80wb1t4t592bs4wz") log_45d675 root.Std.Std.Log { }
+        instance(x: 1526.7, y: 692.3, stableId: "rnqyb21exm5pjyajowh46krq") log_29a56e root.Std.Std.Log { }
+        data_instance(x: 456.3, y: 641.7, stableId: "towszttwk7l5ttsn4befxn5r") data_ba2c76  = "Imagine a colossal, organic spaceship resembling a gargantuan tree suspended in the cosmos. This fantastical creation, born from the depths of science fiction, has its roots consuming a cluster of asteroids as its \'soil\'. The vast branches, flourishing in alien flora, expand outwards, dotted with luminescent orbs, radiating an eerie light in the boundless void of space. This spaceship is not just a device of transportation, but a living entity, thriving, and making its way through the stars towards unknown destinations."
+        instance(x: 603.7, y: 481.0, stableId: "strz8krdkbkybrfunrbuw02q") ``api key_eaa8f4`` root.Utils.``API Key`` { }
+        "dall-e-3" -> ``create image_e17089``.mode_b8a632
+        1 -> ``create image_e17089``.count_f52bb9
+        1024 -> ``create image_e17089``.width_1cd064
+        1024 -> ``create image_e17089``.height_cc6430
+        ``create image_e17089``.onSuccess_2 -> log_45d675.execute
+        ``create image_e17089``.value_1 -> log_45d675.input
+        ``create image_e17089``.onFailure_0 -> log_29a56e.execute
+        ``create image_e17089``.value_3 -> log_29a56e.input
+        data_ba2c76 -> ``create image_e17089``.input_f32118
+        ``api key_eaa8f4``.data_0 -> ``create image_e17089``.gen_0_1
+
+
+    }
+
+
+
+}
+
+module Utils {
+    func ``API Key`` {
+        out(x: 557.3333740234375, y: 59.333343505859375, name: "data") property(String) data_0
+        instance(x: 126.7, y: 67.3, stableId: "adgj33j33dnhuzf3igqwreje") environmentvariable_afe5fb root.Std.Env.EnvironmentVariable { }
+        "OPEN_AI_API_KEY" -> environmentvariable_afe5fb.variable_name
+        environmentvariable_afe5fb.value -> data_0
+
+    }
+
+
+
+}
+
