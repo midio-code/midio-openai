@@ -3,27 +3,33 @@ import("std", Std)
 import("http", Http)
 
 module Chat {
+    type ChatCompletionData { frequency_penalty: Number or Null or Undefined, logit_bias: Any or Undefined, logprobs: Bool or Null or Undefined, top_logprobs: Number or Null or Undefined, max_tokens: Number or Null or Undefined, n: Number or Null or Undefined, presence_penalty: Number or Null or Undefined, response_format: { ``type``: "json_object" } or Null or Undefined, seed: Number or Null or Undefined, stop: String or Any or Null or Undefined, stream: Bool or Null or Undefined, stream_options: Any or Null or Undefined, temperature: Number or Null or Undefined, top_p: Number or Null or Undefined, tools: Any or Undefined, user: String or Null or Undefined }
+    type ChatCompletionToolCall { id: String, ``type``: String, function: { name: String, arguments: String } }
+    type ChatCompletionChoice { finish_reason: String, index: Number, message: { content: String, tool_calls: List<Chat.ChatCompletionToolCall>, role: String } }
+    type ChatCompletionResult { id: String, choices: List<Chat.ChatCompletionChoice>, created: Number, model: String, system_fingerprint: String, object: String, usage: { completion_tokens: Number, prompt_tokens: Number, total_tokens: Number } }
+
     func ``Create chat completion`` {
-        in(x: -864.3333129882813, y: -101, name: "execute") trigger() execute_bbac29
+        in(x: -711.1903686523438, y: -21.57142639160156, name: "execute") trigger() execute_bbac29
         in(x: -1548.000076293945, y: 159.33340454101563, name: "token") property(Any) gen_0_1
         in(x: -1570.000076293945, y: 229.3334045410156, name: "messages") property messages_0
         in(x: -1553, y: 303.0000610351562, name: "model") property(String) model_1d5346
+        in(x: -869.6428833007813, y: 410.1429443359376, name: "options") property(Chat.ChatCompletionData) options_489a1a
         out(x: 463.60023380852294, y: -147.33334350585938, name: "onSuccess") trigger() onSuccess_2
-        out(x: 498.93348576164794, y: -44.66668701171875, name: "value") property(Any) value_1
+        out(x: 498.93348576164794, y: -44.66668701171875, name: "value") property(Chat.ChatCompletionResult) value_1
         out(x: 470.93348576164794, y: 83.33331298828125, name: "onFailure") trigger() onFailure_0
-        out(x: 484.26685978508544, y: 190.66665649414065, name: "error") property(Any) value_3
+        out(x: 484.26685978508544, y: 190.66665649414065, name: "error") property(String) value_3
         instance(x: 0.0, y: 0.0, stableId: "wnltu8f41t909w121zc7eiib") parse_0c785e root.Std.Json.Parse { }
-        data_instance(x: -878.2, y: 234.7, stableId: "b7201f65fsjywa6ul2jlakub") data_fbe911  = { messages: messages, model: model }
-        instance(x: 53.6, y: 243.9, stableId: "xg5cebj0bihhjgov4v4xpjcb") orelse_8c1efc root.Std.Std.OrElse { }
-        instance(x: -1262.1, y: 88.3, stableId: "i6dch6k58ixftowidckep88a") template_d88e20 root.Std.Strings.Template {
+        data_instance(x: -1044.5, y: 250.7, stableId: "b7201f65fsjywa6ul2jlakub") data_fbe911  = { messages: messages, model: model }
+        instance(x: 21.0, y: 173.6, stableId: "xg5cebj0bihhjgov4v4xpjcb") orelse_8c1efc root.Std.Std.OrElse { }
+        instance(x: -1207.2, y: 82.9, stableId: "i6dch6k58ixftowidckep88a") template_d88e20 root.Std.Strings.Template {
             template: "Bearer {{token}}"
         }
-        data_instance(x: -966.9, y: 73.2, stableId: "lfnv9vzjgixs1ac82bj2mnbj") data_1eba4e  = { ``content-type``: "application/json", authorization: auth }
+        data_instance(x: -912.0, y: 82.9, stableId: "lfnv9vzjgixs1ac82bj2mnbj") data_1eba4e  = { ``content-type``: "application/json", authorization: auth }
         instance(x: -390.0, y: 28.4, stableId: "d6q7nc1lx0myk9di9r7hkqwb") fetchurl_96da5f root.Http.Http.FetchUrl { }
+        instance(x: -622.6, y: 250.7, stableId: "v119rgtm6sh6johzkbi1kmvo") merge_584733 root.Std.Map.Merge { }
         fetchurl_96da5f.continue -> parse_0c785e.execute
         fetchurl_96da5f.response -> parse_0c785e.string
         data_1eba4e -> fetchurl_96da5f.headers
-        data_fbe911 -> fetchurl_96da5f.body
         parse_0c785e.error -> orelse_8c1efc.first
         fetchurl_96da5f.error -> orelse_8c1efc.second
         template_d88e20.output -> data_1eba4e.auth
@@ -39,21 +45,27 @@ module Chat {
         execute_bbac29 -> fetchurl_96da5f.execute
         fetchurl_96da5f.onError -> onFailure_0
         model_1d5346 -> data_fbe911.model
+        data_fbe911 -> merge_584733.first
+        options_489a1a -> merge_584733.second
+        merge_584733.merged -> fetchurl_96da5f.body
 
     }
 
     module Tests {
-        instance(x: 1444.7, y: 402.9, stableId: "tk0ngcr91x0h57uea5vaghha") log_8a6948 root.Std.Std.Log { }
-        instance(x: 1444.7, y: 558.8, stableId: "js27mknbh4c4tyv5oyv8ir0a") log_e5a53e root.Std.Std.Log { }
-        data_instance(x: 564.5, y: 589.6, stableId: "s3mmrbd0ducwjqa6si5oewzx") data_88fda2  = [{ content: "You are a helpful assistant.", role: "system" }, { content: "Hello!", role: "user" }]
-        instance(x: 1077.3, y: 450.9, stableId: "fka996r0283g4xbrho5tyr3c") Completions_8bfa6d root.Chat.``Create chat completion`` { }
-        instance(x: 545.4, y: 437.9, stableId: "g7xckiritt6s56i55z5j544w") APIKey_d087a5 root.Utils.``API Key`` { }
+        instance(x: 1545.3, y: 414.9, stableId: "tk0ngcr91x0h57uea5vaghha") log_8a6948 root.Std.Std.Log { }
+        instance(x: 1545.3, y: 571.9, stableId: "js27mknbh4c4tyv5oyv8ir0a") log_e5a53e root.Std.Std.Log { }
+        data_instance(x: 564.0, y: 488.4, stableId: "s3mmrbd0ducwjqa6si5oewzx") data_88fda2  = [{ content: "You are a helpful assistant.", role: "system" }, { content: "Hello!", role: "user" }]
+        instance(x: 1092.1, y: 454.3, stableId: "fka996r0283g4xbrho5tyr3c") Completions_8bfa6d root.Chat.``Create chat completion`` { }
+        instance(x: 755.7, y: 376.8, stableId: "g7xckiritt6s56i55z5j544w") APIKey_d087a5 root.Utils.``API Key`` { }
+        data_instance(x: 674.6, y: 746.1, stableId: "yat1o4ef2rhn4q18ww3beyyk") data_c301bf Chat.ChatCompletionData = { max_tokens: 5 }
         data_88fda2 -> Completions_8bfa6d.messages_0
         APIKey_d087a5.data_0 -> Completions_8bfa6d.gen_0_1
         Completions_8bfa6d.onSuccess_2 -> log_8a6948.execute
-        Completions_8bfa6d.value_1 -> log_8a6948.input
         Completions_8bfa6d.onFailure_0 -> log_e5a53e.execute
         Completions_8bfa6d.value_3 -> log_e5a53e.input
+        data_c301bf -> Completions_8bfa6d.options_489a1a
+        "gpt-4o" -> Completions_8bfa6d.model_1d5346
+        Completions_8bfa6d.value_1 -> log_8a6948.input
 
 
     }
